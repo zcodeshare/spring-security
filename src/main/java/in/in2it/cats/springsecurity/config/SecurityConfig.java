@@ -16,7 +16,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public").permitAll()
+                .requestMatchers(
+                        "/p1",
+                        "/p2",
+                        "/p3",
+                        "/p4",
+                        "/p5"
+                ).permitAll()
                 .anyRequest().authenticated()
         ).httpBasic(Customizer.withDefaults());
 

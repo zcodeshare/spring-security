@@ -13,13 +13,53 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/public")
+    @GetMapping("/p1")
     public String publicEndPoint() {
-        return "This is public endpoint";
+        return "This is public-1 endpoint";
     }
 
-    @GetMapping("/user")
-    public String userEndPoint() {
-        return userService.getUser();
+    @GetMapping("/p2")
+    public String p2(){
+        return "This is public-2 endpoint";
+    }
+
+    @GetMapping("/p3")
+    public String p3(){
+        return "This is public-3 endpoint";
+    }
+
+    @GetMapping("/p4")
+    public String p4(){
+        return "This is public-4 endpoint";
+    }
+
+    @GetMapping("/p5")
+    public String p5(){
+        return "This is public-5 endpoint";
+    }
+
+    @GetMapping("/u1")
+    public String u1() {
+        return userService.getUser1();
+    }
+
+    @GetMapping("/u2")
+    public String u2(){
+        return userService.getUser2();
+    }
+
+    @GetMapping("u3")
+    public String u3(){
+        return userService.getUser3();
+    }
+
+    @GetMapping("/u4")
+    public String u4(){
+        return userService.getUser4();
+    }
+
+    @GetMapping("/u5")
+    public String u5(){
+        return userService.getUser5();
     }
 }
