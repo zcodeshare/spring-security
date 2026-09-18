@@ -1,65 +1,78 @@
 package in.in2it.cats.springsecurity.controller;
 
-import in.in2it.cats.springsecurity.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
 
-    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/p1")
+    @GetMapping("/public")
     public String publicEndPoint() {
-        return "This is public-1 endpoint";
+        return "This is public endpoint";
     }
 
-    @GetMapping("/p2")
-    public String p2(){
-        return "This is public-2 endpoint";
+    @GetMapping("/user")
+    public String user(){
+        return "Hi, I am John, and I work as a software developer.";
     }
 
-    @GetMapping("/p3")
-    public String p3(){
-        return "This is public-3 endpoint";
+    @GetMapping("/user-method")
+    @PreAuthorize("hasRole('USER')")
+    public String userMethod() {
+        return "User method area";
     }
 
-    @GetMapping("/p4")
-    public String p4(){
-        return "This is public-4 endpoint";
+    @GetMapping("/admin-only")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminOnly(){
+        return "Admin method area";
     }
 
-    @GetMapping("/p5")
-    public String p5(){
-        return "This is public-5 endpoint";
+    @GetMapping("/current-user")
+    public String currentUser(){
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        return "Username : " + authentication.getName()
+                + ", Authorities : " + authentication.getAuthorities();
     }
 
-    @GetMapping("/u1")
-    public String u1() {
-        return userService.getUser1();
+    @GetMapping("/profile")
+    public String profile() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        return "Welcome " + authentication.getName();
     }
 
-    @GetMapping("/u2")
-    public String u2(){
-        return userService.getUser2();
+    @GetMapping("/test-authentication")
+    public String testAuthentication() {
+
+        Authentication authentication =
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                "john",
+                                "john123"
+                        )
+                );
+
+        return "Authenticated user: " + authentication.getName();
     }
 
-    @GetMapping("u3")
-    public String u3(){
-        return userService.getUser3();
-    }
-
-    @GetMapping("/u4")
-    public String u4(){
-        return userService.getUser4();
-    }
-
-    @GetMapping("/u5")
-    public String u5(){
-        return userService.getUser5();
-    }
 }
